@@ -172,10 +172,11 @@
 .editor-paper {
   flex: 1;
   overflow-y: auto;
-  padding: 32px;
+  padding: 32px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  background: #e8eaed;
 }
 
 .view-only-banner {
@@ -187,34 +188,57 @@
   font-size: 13px;
   margin-bottom: 16px;
   width: 100%;
-  max-width: 760px;
+  max-width: 794px;
   box-sizing: border-box;
 }
 
+/* A4 page: 794px wide (210mm @ 96dpi), each page 1122px tall (297mm @ 96dpi) */
 .tiptap-editor {
-  width: 100%;
-  max-width: 760px;
+  width: 794px;
+  max-width: 100%;
   background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  min-height: 480px;
-  box-shadow: 0 1px 8px rgba(0,0,0,0.06);
+  box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  /* page-break lines every 1122px via repeating gradient */
+  background-image: repeating-linear-gradient(
+    to bottom,
+    white 0px,
+    white 1082px,
+    #e8eaed 1082px,
+    #e8eaed 1122px
+  );
 }
 
 .tiptap-editor .ProseMirror {
-  padding: 40px 48px;
-  min-height: 480px;
+  padding: 96px 96px;
+  min-height: 1122px;
   outline: none;
   font-size: 15px;
   line-height: 1.7;
   color: #1e293b;
   overflow-wrap: break-word;
   word-break: break-word;
+  /* keep text inside the printable area margins */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.tiptap-editor .ProseMirror p { margin: 0 0 12px; }
+.tiptap-editor .ProseMirror h1 { font-size: 28px; font-weight: 700; margin: 24px 0 12px; color: #0f172a; }
+.tiptap-editor .ProseMirror h2 { font-size: 22px; font-weight: 700; margin: 20px 0 10px; color: #0f172a; }
+.tiptap-editor .ProseMirror h3 { font-size: 18px; font-weight: 600; margin: 16px 0 8px; color: #0f172a; }
+.tiptap-editor .ProseMirror ul, .tiptap-editor .ProseMirror ol { padding-left: 24px; margin: 8px 0; }
+.tiptap-editor .ProseMirror li { margin: 4px 0; }
+.tiptap-editor .ProseMirror p.is-editor-empty:first-child::before {
+  content: attr(data-placeholder);
+  color: #94a3b8;
+  pointer-events: none;
+  float: left;
+  height: 0;
 }
 
 @media (max-width: 860px) {
-  .tiptap-editor .ProseMirror { padding: 24px 20px; }
-  .editor-paper { padding: 16px; }
+  .tiptap-editor .ProseMirror { padding: 48px 32px; }
+  .editor-paper { padding: 16px 8px; }
 }
 
 .tiptap-editor .ProseMirror p { margin: 0 0 12px; }
