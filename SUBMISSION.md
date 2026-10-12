@@ -9,13 +9,14 @@
 | README with setup instructions | `README.md` | ✅ Complete |
 | Architecture note | `ARCHITECTURE.md` | ✅ Complete |
 | AI workflow note | `AI_WORKFLOW.md` | ✅ Complete |
-| Automated tests (7 tests) | `server/__tests__/api.test.ts` | ✅ Passing |
+| Automated tests (10 tests) | `server/__tests__/api.test.ts` | ✅ Passing |
 | Live deployment URL | See below | ✅ |
 | Walkthrough video | `VIDEO.txt` | ✅ |
 
 ## Live Deployment
 
-**URL:** [Add deployment URL here after deploying to Railway/Render]
+**Frontend (Vercel):** https://ajaiadocs-ten.vercel.app
+**Backend API (Railway):** https://ajaiadocs-production-09bd.up.railway.app
 
 **Demo credentials:**
 - Alice (owner): `alice@example.com` / `password123`
@@ -35,14 +36,13 @@
 - [x] Revoke access from shared user
 - [x] Dashboard shows owned vs. shared documents distinctly
 - [x] View-only mode with banner for view-permission users
-- [x] 7 integration tests covering auth, CRUD, and sharing logic
+- [x] 10 integration tests covering auth, CRUD, and sharing logic
 
 ## What's Incomplete / Would Add Next
 
 **With 2–4 more hours:**
 
-1. **Deployment** — set up Railway or Render with environment variables; currently runs locally only
-2. **`.docx` import** — add `mammoth.js` to convert Word files to HTML
+1. **`.docx` import** — add `mammoth.js` to convert Word files to HTML
 3. **Real-time presence** — add a WebSocket layer with Yjs or a simple socket event for "user X is editing"
 4. **Document export** — add a "Download as Markdown" button (reverse-parse TipTap HTML)
 5. **Production auth** — replace `x-user-id` header with JWT + httpOnly cookies
@@ -54,4 +54,4 @@ cd server
 npx jest --forceExit
 ```
 
-Expected output: 7 tests passing.
+Expected output: 10 tests passing.
