@@ -1,0 +1,19 @@
+Walkthrough Video URL:
+[Record a 3-5 minute Loom or YouTube video and paste the URL here]
+
+Suggested walkthrough script:
+1. Show the login page and three demo accounts
+2. Sign in as Alice, create a new document
+3. Type content, demonstrate bold/italic/underline, heading dropdown, bullet list
+4. Show auto-save indicator ("Saved" status)
+5. Rename the document via the title input
+6. Click Share, share with bob@example.com as "edit"
+7. Open a new incognito tab, sign in as Bob
+8. Show the document appears under "Shared with me" on Bob's dashboard
+9. Open the shared document - Bob can edit
+10. Share with carol@example.com as "view"
+11. Sign in as Carol, open the document - see "View only" banner
+12. Back as Alice - import a .txt or .md file
+13. Show the imported document opens in the editor
+14. Demonstrate attaching a file to a document
+15. Explain what was intentionally cut (real-time collab, .docx import, JWT auth)

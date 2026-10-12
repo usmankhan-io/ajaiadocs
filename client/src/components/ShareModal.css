@@ -1,0 +1,149 @@
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 100;
+  padding: 16px;
+}
+
+.modal {
+  background: white;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 480px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+  overflow: hidden;
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 0;
+}
+.modal-header h2 { font-size: 18px; font-weight: 700; color: #1e293b; margin: 0; }
+.modal-close {
+  background: none;
+  border: none;
+  font-size: 16px;
+  color: #94a3b8;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+}
+.modal-close:hover { background: #f1f5f9; }
+
+.share-form { padding: 16px 24px; }
+.share-inputs { display: flex; gap: 8px; }
+.share-email-wrap { flex: 1; }
+.share-email-wrap input {
+  width: 100%;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 9px 12px;
+  font-size: 14px;
+  outline: none;
+  box-sizing: border-box;
+}
+.share-email-wrap input:focus { border-color: #2563eb; }
+
+.share-form select {
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 9px 10px;
+  font-size: 13px;
+  background: white;
+  cursor: pointer;
+}
+
+.btn-share-send {
+  background: #2563eb;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 9px 16px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.btn-share-send:hover { background: #1d4ed8; }
+.btn-share-send:disabled { opacity: 0.6; }
+
+.share-error { margin-top: 8px; color: #dc2626; font-size: 13px; }
+.share-success { margin-top: 8px; color: #16a34a; font-size: 13px; }
+
+.share-current { padding: 0 24px 16px; }
+.share-current h3 { font-size: 12px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; margin: 0 0 12px; }
+
+.share-person {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 0;
+  border-bottom: 1px solid #f1f5f9;
+}
+.owner-row { opacity: 0.8; }
+.share-person-info { flex: 1; display: flex; flex-direction: column; gap: 1px; }
+.share-person-name { font-size: 14px; font-weight: 500; color: #1e293b; }
+.share-person-role { font-size: 12px; color: #94a3b8; }
+.share-person-email { font-size: 12px; color: #94a3b8; }
+
+.share-badge {
+  font-size: 11px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 20px;
+  text-transform: capitalize;
+}
+.share-badge.edit { background: #dcfce7; color: #16a34a; }
+.share-badge.view { background: #f1f5f9; color: #64748b; }
+
+.revoke-btn {
+  background: none;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  padding: 4px 8px;
+  font-size: 12px;
+  color: #64748b;
+  cursor: pointer;
+}
+.revoke-btn:hover { background: #fef2f2; color: #dc2626; border-color: #fecaca; }
+
+.no-shares { font-size: 13px; color: #cbd5e1; padding: 8px 0; margin: 0; }
+
+.avatar-sm {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.quick-share {
+  padding: 12px 24px 20px;
+  border-top: 1px solid #f1f5f9;
+}
+.quick-share-label { font-size: 12px; color: #94a3b8; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 8px; }
+.quick-share-list { display: flex; gap: 8px; flex-wrap: wrap; }
+.quick-share-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 20px;
+  padding: 5px 12px 5px 5px;
+  font-size: 13px;
+  cursor: pointer;
+  color: #374151;
+}
+.quick-share-btn:hover { background: #eff6ff; border-color: #bfdbfe; }
