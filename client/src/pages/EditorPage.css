@@ -208,6 +208,13 @@
   font-size: 15px;
   line-height: 1.7;
   color: #1e293b;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+
+@media (max-width: 860px) {
+  .tiptap-editor .ProseMirror { padding: 24px 20px; }
+  .editor-paper { padding: 16px; }
 }
 
 .tiptap-editor .ProseMirror p { margin: 0 0 12px; }
