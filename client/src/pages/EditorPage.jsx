@@ -83,9 +83,19 @@ export default function EditorPage() {
     URL.revokeObjectURL(url);
   }, [editor, title]);
 
-  const exportPDF = useCallback(() => {
-    window.print();
-  }, []);
+  const exportPDF = useCallback(async () => {
+    const html2pdf = (await import('html2pdf.js')).default;
+    const element = document.querySelector('.paper-card');
+    if (!element) return;
+    const w = element.scrollWidth;
+    const h = element.scrollHeight;
+    html2pdf().set({
+      margin: 0,
+      filename: `${title || 'document'}.pdf`,
+      html2canvas: { scale: 2, useCORS: true, width: w, height: h },
+      jsPDF: { unit: 'px', format: [w, h], orientation: 'portrait' },
+    }).from(element).save();
+  }, [title]);
 
   // Load document
   useEffect(() => {
@@ -205,8 +215,8 @@ export default function EditorPage() {
           <button className="btn-export" onClick={exportMarkdown} title="Download as Markdown">
             <FileDown size={15} /> .md
           </button>
-          <button className="btn-export" onClick={exportPDF} title="Print / Save as PDF">
-            <Printer size={15} /> PDF
+          <button className="btn-export" onClick={exportPDF} title="Download as PDF">
+            <Printer size={15} /> .pdf
           </button>
           {isOwner && (
             <button className="btn-share" onClick={() => setShowShare(true)}>Share</button>

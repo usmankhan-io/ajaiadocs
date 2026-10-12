@@ -213,12 +213,3 @@
   .editor-paper { padding: 16px 8px 48px; }
 }
 
-/* ── Print / PDF export ── */
-@media print {
-  .editor-header, .editor-toolbar-wrap, .editor-sidebar,
-  .view-only-banner, .word-count, .btn-export, .btn-share { display: none !important; }
-  .editor-body { display: block !important; }
-  .editor-paper { background: white !important; padding: 0 !important; display: block !important; }
-  .paper-card { box-shadow: none !important; border: none !important; width: 100% !important; }
-  .ProseMirror { padding: 0 !important; }
-}
