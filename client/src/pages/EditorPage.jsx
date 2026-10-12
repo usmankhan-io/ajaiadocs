@@ -4,6 +4,11 @@ import { useEditor, EditorContent } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Underline from '@tiptap/extension-underline';
 import TextAlign from '@tiptap/extension-text-align';
+import {
+  Bold, Italic, Underline as UnderlineIcon,
+  List, ListOrdered, Undo2, Redo2,
+  AlignLeft, AlignCenter, AlignRight,
+} from 'lucide-react';
 import { docsApi, uploadApi } from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import ShareModal from '../components/ShareModal';
@@ -16,7 +21,7 @@ export default function EditorPage() {
 
   const [doc, setDoc] = useState(null);
   const [title, setTitle] = useState('');
-  const [saveStatus, setSaveStatus] = useState('saved'); // 'saved' | 'saving' | 'unsaved'
+  const [saveStatus, setSaveStatus] = useState('saved');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [showShare, setShowShare] = useState(false);
@@ -32,7 +37,9 @@ export default function EditorPage() {
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: '',
-    onUpdate: () => setSaveStatus('unsaved'),
+    onUpdate: () => {
+      setSaveStatus('unsaved');
+    },
     editable: true,
   });
 
@@ -155,56 +162,73 @@ export default function EditorPage() {
         </div>
       </header>
 
-      {/* Formatting toolbar */}
-      {canEdit && editor && (
-        <div className="editor-toolbar">
-          <div className="toolbar-group">
-            <ToolbarButton active={editor.isActive('bold')} onClick={() => editor.chain().focus().toggleBold().run()} title="Bold (Ctrl+B)">
-              <b>B</b>
-            </ToolbarButton>
-            <ToolbarButton active={editor.isActive('italic')} onClick={() => editor.chain().focus().toggleItalic().run()} title="Italic (Ctrl+I)">
-              <i>I</i>
-            </ToolbarButton>
-            <ToolbarButton active={editor.isActive('underline')} onClick={() => editor.chain().focus().toggleUnderline().run()} title="Underline (Ctrl+U)">
-              <u>U</u>
-            </ToolbarButton>
-          </div>
-          <div className="toolbar-sep" />
-          <div className="toolbar-group">
-            <select
-              className="heading-select"
-              value={
-                editor.isActive('heading', { level: 1 }) ? '1' :
-                editor.isActive('heading', { level: 2 }) ? '2' :
-                editor.isActive('heading', { level: 3 }) ? '3' : '0'
-              }
-              onChange={e => {
-                const v = e.target.value;
-                if (v === '0') editor.chain().focus().setParagraph().run();
-                else editor.chain().focus().toggleHeading({ level: parseInt(v) }).run();
-              }}
-            >
-              <option value="0">Normal</option>
-              <option value="1">Heading 1</option>
-              <option value="2">Heading 2</option>
-              <option value="3">Heading 3</option>
-            </select>
-          </div>
-          <div className="toolbar-sep" />
-          <div className="toolbar-group">
-            <ToolbarButton active={editor.isActive('bulletList')} onClick={() => editor.chain().focus().toggleBulletList().run()} title="Bullet list">≡</ToolbarButton>
-            <ToolbarButton active={editor.isActive('orderedList')} onClick={() => editor.chain().focus().toggleOrderedList().run()} title="Numbered list">1.</ToolbarButton>
-          </div>
-          <div className="toolbar-sep" />
-          <div className="toolbar-group">
-            <ToolbarButton active={editor.isActive({ textAlign: 'left' })} onClick={() => editor.chain().focus().setTextAlign('left').run()} title="Align left">⇐</ToolbarButton>
-            <ToolbarButton active={editor.isActive({ textAlign: 'center' })} onClick={() => editor.chain().focus().setTextAlign('center').run()} title="Center">≡</ToolbarButton>
-            <ToolbarButton active={editor.isActive({ textAlign: 'right' })} onClick={() => editor.chain().focus().setTextAlign('right').run()} title="Align right">⇒</ToolbarButton>
-          </div>
-          <div className="toolbar-sep" />
-          <div className="toolbar-group">
-            <ToolbarButton active={false} onClick={() => editor.chain().focus().undo().run()} title="Undo">↩</ToolbarButton>
-            <ToolbarButton active={false} onClick={() => editor.chain().focus().redo().run()} title="Redo">↪</ToolbarButton>
+      {/* Floating toolbar */}
+      {editor && (
+        <div className="editor-toolbar-wrap">
+          <div className="editor-toolbar">
+            <div className="toolbar-group">
+              <ToolbarButton onClick={() => editor.chain().focus().undo().run()} title="Undo" disabled={!editor.can().undo()}>
+                <Undo2 size={15} />
+              </ToolbarButton>
+              <ToolbarButton onClick={() => editor.chain().focus().redo().run()} title="Redo" disabled={!editor.can().redo()}>
+                <Redo2 size={15} />
+              </ToolbarButton>
+            </div>
+            <div className="toolbar-sep" />
+            <div className="toolbar-group">
+              <select
+                className="heading-select"
+                value={
+                  editor.isActive('heading', { level: 1 }) ? '1' :
+                  editor.isActive('heading', { level: 2 }) ? '2' :
+                  editor.isActive('heading', { level: 3 }) ? '3' : '0'
+                }
+                onChange={e => {
+                  const v = e.target.value;
+                  if (v === '0') editor.chain().focus().setParagraph().run();
+                  else editor.chain().focus().toggleHeading({ level: parseInt(v) }).run();
+                }}
+                disabled={!canEdit}
+              >
+                <option value="0">Normal text</option>
+                <option value="1">Heading 1</option>
+                <option value="2">Heading 2</option>
+                <option value="3">Heading 3</option>
+              </select>
+            </div>
+            <div className="toolbar-sep" />
+            <div className="toolbar-group">
+              <ToolbarButton active={editor.isActive('bold')} onClick={() => editor.chain().focus().toggleBold().run()} title="Bold" disabled={!canEdit}>
+                <Bold size={14} />
+              </ToolbarButton>
+              <ToolbarButton active={editor.isActive('italic')} onClick={() => editor.chain().focus().toggleItalic().run()} title="Italic" disabled={!canEdit}>
+                <Italic size={14} />
+              </ToolbarButton>
+              <ToolbarButton active={editor.isActive('underline')} onClick={() => editor.chain().focus().toggleUnderline().run()} title="Underline" disabled={!canEdit}>
+                <UnderlineIcon size={14} />
+              </ToolbarButton>
+            </div>
+            <div className="toolbar-sep" />
+            <div className="toolbar-group">
+              <ToolbarButton active={editor.isActive('bulletList')} onClick={() => editor.chain().focus().toggleBulletList().run()} title="Bullet list" disabled={!canEdit}>
+                <List size={15} />
+              </ToolbarButton>
+              <ToolbarButton active={editor.isActive('orderedList')} onClick={() => editor.chain().focus().toggleOrderedList().run()} title="Numbered list" disabled={!canEdit}>
+                <ListOrdered size={15} />
+              </ToolbarButton>
+            </div>
+            <div className="toolbar-sep" />
+            <div className="toolbar-group">
+              <ToolbarButton active={editor.isActive({ textAlign: 'left' })} onClick={() => editor.chain().focus().setTextAlign('left').run()} title="Align left" disabled={!canEdit}>
+                <AlignLeft size={14} />
+              </ToolbarButton>
+              <ToolbarButton active={editor.isActive({ textAlign: 'center' })} onClick={() => editor.chain().focus().setTextAlign('center').run()} title="Center" disabled={!canEdit}>
+                <AlignCenter size={14} />
+              </ToolbarButton>
+              <ToolbarButton active={editor.isActive({ textAlign: 'right' })} onClick={() => editor.chain().focus().setTextAlign('right').run()} title="Align right" disabled={!canEdit}>
+                <AlignRight size={14} />
+              </ToolbarButton>
+            </div>
           </div>
         </div>
       )}
@@ -217,7 +241,9 @@ export default function EditorPage() {
               View only — you have read-only access to this document
             </div>
           )}
-          <EditorContent editor={editor} className="tiptap-editor" />
+          <div className="paper-card">
+            <EditorContent editor={editor} />
+          </div>
         </div>
 
         <aside className="editor-sidebar">
@@ -287,13 +313,14 @@ export default function EditorPage() {
   );
 }
 
-function ToolbarButton({ active, onClick, title, children }) {
+function ToolbarButton({ active, onClick, title, children, disabled }) {
   return (
     <button
       className={`toolbar-btn${active ? ' active' : ''}`}
       onClick={onClick}
       title={title}
       type="button"
+      disabled={disabled}
     >
       {children}
     </button>
