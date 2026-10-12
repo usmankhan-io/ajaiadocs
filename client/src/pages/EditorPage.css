@@ -42,6 +42,12 @@
   border-radius: 8px; padding: 7px 14px; font-size: 13px; font-weight: 600; cursor: pointer;
 }
 .btn-share:hover { background: #1d4ed8; }
+.btn-export {
+  background: none; border: 1px solid #e2e8f0; border-radius: 8px;
+  padding: 6px 10px; font-size: 12px; font-weight: 500; cursor: pointer;
+  color: #374151; display: flex; align-items: center; gap: 4px;
+}
+.btn-export:hover { background: #f1f5f9; border-color: #cbd5e1; }
 .current-user-info { display: flex; align-items: center; gap: 6px; font-size: 13px; color: #374151; font-weight: 500; }
 .current-user-name  { max-width: 120px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .doc-owner-info {
@@ -194,8 +200,25 @@
 .share-perm.edit { background: #dcfce7; color: #16a34a; }
 .share-perm.view { background: #f1f5f9; color: #64748b; }
 
+/* ── Word count ── */
+.word-count {
+  width: 816px; max-width: 100%;
+  text-align: right; font-size: 11px; color: #9aa0a6;
+  padding: 6px 4px 0;
+}
+
 @media (max-width: 900px) {
   .tiptap-editor-wrap { width: 100%; }
   .tiptap-editor .ProseMirror { padding: 40px 32px; }
   .editor-paper { padding: 16px 8px 48px; }
+}
+
+/* ── Print / PDF export ── */
+@media print {
+  .editor-header, .editor-toolbar-wrap, .editor-sidebar,
+  .view-only-banner, .word-count, .btn-export, .btn-share { display: none !important; }
+  .editor-body { display: block !important; }
+  .editor-paper { background: white !important; padding: 0 !important; display: block !important; }
+  .paper-card { box-shadow: none !important; border: none !important; width: 100% !important; }
+  .ProseMirror { padding: 0 !important; }
 }

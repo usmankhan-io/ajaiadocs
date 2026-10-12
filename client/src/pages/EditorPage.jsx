@@ -8,11 +8,36 @@ import {
   Bold, Italic, Underline as UnderlineIcon,
   List, ListOrdered, Undo2, Redo2,
   AlignLeft, AlignCenter, AlignRight,
+  FileDown, Printer,
 } from 'lucide-react';
 import { docsApi, uploadApi } from '../api';
 import { useAuth } from '../contexts/AuthContext';
 import ShareModal from '../components/ShareModal';
 import './EditorPage.css';
+
+function htmlToMarkdown(html) {
+  const div = document.createElement('div');
+  div.innerHTML = html;
+  const convert = (node) => {
+    if (node.nodeType === Node.TEXT_NODE) return node.textContent;
+    if (node.nodeType !== Node.ELEMENT_NODE) return '';
+    const tag = node.tagName.toLowerCase();
+    const inner = Array.from(node.childNodes).map(convert).join('');
+    if (tag === 'h1') return `# ${inner}\n\n`;
+    if (tag === 'h2') return `## ${inner}\n\n`;
+    if (tag === 'h3') return `### ${inner}\n\n`;
+    if (tag === 'p') return `${inner}\n\n`;
+    if (tag === 'strong' || tag === 'b') return `**${inner}**`;
+    if (tag === 'em' || tag === 'i') return `_${inner}_`;
+    if (tag === 'u') return inner;
+    if (tag === 'ul') return Array.from(node.children).map(li => `- ${Array.from(li.childNodes).map(convert).join('')}\n`).join('') + '\n';
+    if (tag === 'ol') return Array.from(node.children).map((li, i) => `${i + 1}. ${Array.from(li.childNodes).map(convert).join('')}\n`).join('') + '\n';
+    if (tag === 'li') return inner;
+    if (tag === 'br') return '\n';
+    return inner;
+  };
+  return Array.from(div.childNodes).map(convert).join('').replace(/\n{3,}/g, '\n\n').trim();
+}
 
 export default function EditorPage() {
   const { id } = useParams();
@@ -26,6 +51,7 @@ export default function EditorPage() {
   const [error, setError] = useState('');
   const [showShare, setShowShare] = useState(false);
   const [attachUploading, setAttachUploading] = useState(false);
+  const [wordCount, setWordCount] = useState(0);
   const attachRef = useRef(null);
   const titleSaveTimer = useRef(null);
   const contentSaveTimer = useRef(null);
@@ -37,11 +63,29 @@ export default function EditorPage() {
       TextAlign.configure({ types: ['heading', 'paragraph'] }),
     ],
     content: '',
-    onUpdate: () => {
+    onUpdate: ({ editor: e }) => {
       setSaveStatus('unsaved');
+      const text = e.getText().trim();
+      setWordCount(text ? text.split(/\s+/).length : 0);
     },
     editable: true,
   });
+
+  const exportMarkdown = useCallback(() => {
+    if (!editor) return;
+    const md = htmlToMarkdown(editor.getHTML());
+    const blob = new Blob([md], { type: 'text/markdown' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${title || 'document'}.md`;
+    a.click();
+    URL.revokeObjectURL(url);
+  }, [editor, title]);
+
+  const exportPDF = useCallback(() => {
+    window.print();
+  }, []);
 
   // Load document
   useEffect(() => {
@@ -53,6 +97,8 @@ export default function EditorPage() {
         setDoc(d);
         setTitle(d.title);
         editor?.commands.setContent(d.content || '');
+        const text = (editor?.getText() || '').trim();
+        setWordCount(text ? text.split(/\s+/).length : 0);
         setSaveStatus('saved');
         editor?.setEditable(d.role !== 'view');
       })
@@ -156,6 +202,12 @@ export default function EditorPage() {
               <span>{doc.owner_name}</span>
             </div>
           )}
+          <button className="btn-export" onClick={exportMarkdown} title="Download as Markdown">
+            <FileDown size={15} /> .md
+          </button>
+          <button className="btn-export" onClick={exportPDF} title="Print / Save as PDF">
+            <Printer size={15} /> PDF
+          </button>
           {isOwner && (
             <button className="btn-share" onClick={() => setShowShare(true)}>Share</button>
           )}
@@ -243,6 +295,9 @@ export default function EditorPage() {
           )}
           <div className="paper-card">
             <EditorContent editor={editor} />
+          </div>
+          <div className="word-count">
+            {wordCount} {wordCount === 1 ? 'word' : 'words'}
           </div>
         </div>
 
